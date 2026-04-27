@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=VT323&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-retro: "VT323", monospace;
+  --color-syn-cyan: #00ffff;
+  --color-syn-magenta: #ff00ff;
+  --color-syn-void: #050505;
+  --color-syn-yellow: #ffff00;
+}
+
+@layer base {
+  body {
+    @apply bg-syn-void text-syn-cyan font-mono overflow-hidden;
+    background-image: 
+      radial-gradient(circle at center, rgba(0, 255, 255, 0.05) 0%, transparent 70%),
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 100%, 100% 2px, 3px 100%;
+    text-shadow: 0.05rem 0 0.02rem rgba(255, 0, 255, 0.75),
+                -0.025rem -0.05rem 0 rgba(0, 255, 0, 0.75),
+                0.025rem 0.05rem 0 rgba(0, 0, 255, 0.75);
+    animation: flicker 0.15s infinite;
+  }
+
+  /* Scanlines */
+  body::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 100;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(18, 16, 16, 0.1);
+    opacity: 0;
+    z-index: 100;
+    pointer-events: none;
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+  }
+}
+
+@keyframes screen-tear {
+  0% { clip-path: inset(0 0 0 0); transform: translateX(0); }
+  2% { clip-path: inset(20% 0 50% 0); transform: translateX(-20px); filter: hue-rotate(90deg); }
+  4% { clip-path: inset(80% 0 10% 0); transform: translateX(20px); }
+  6% { clip-path: inset(0 0 0 0); transform: translateX(0); filter: none; }
+  100% { clip-path: inset(0 0 0 0); transform: translateX(0); }
+}
+
+.tear-layer {
+  animation: screen-tear 4s infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes flicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 0.95; }
+  10% { opacity: 0.9; }
+  15% { opacity: 1; }
+  20% { opacity: 0.95; }
+  25% { opacity: 0.97; }
+  30% { opacity: 1; }
+  70% { opacity: 0.95; }
+  72% { opacity: 0.9; }
+  77% { opacity: 0.98; }
+  100% { opacity: 1; }
+}
+
+@keyframes glitch-anim {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-text {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+  }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+  }
+}
+
+.glitch-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text {
+  @apply relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  @apply absolute top-0 left-0 w-full h-full;
+  content: attr(data-text);
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--color-syn-magenta);
+  clip-path: inset(0 0 0 0);
+  animation: glitch-text 3s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--color-syn-cyan);
+  clip-path: inset(0 0 0 0);
+  animation: glitch-text 2s infinite linear alternate-reverse;
+}
+
+.terminal-outline {
+  border: 1px solid var(--color-syn-cyan);
+  box-shadow: 0 0 10px var(--color-syn-cyan), inset 0 0 5px var(--color-syn-cyan);
+}
+
